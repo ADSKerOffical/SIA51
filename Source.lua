@@ -8,11 +8,13 @@ local Tab = Window:MakeTab({
 	PremiumOnly = false
 })
 
+pcall(function()
 game.Players.LocalPlayer.leaderstats.Cell:GetPropertyChangedSignal("Value"):Connect(function()
  if game.Players.LocalPlayer.leaderstats.Cell.Value <= -1 then
 game.Players.LocalPlayer.leaderstats.Cell.Value = 1
    game:Shutdown()
  end
+end)
 end)
 
 game:GetService("RunService").Heartbeat:Connect(function()
