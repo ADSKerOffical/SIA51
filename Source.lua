@@ -66,8 +66,10 @@ Tab:AddToggle({
  Callback = function(Value)
 loip = Value
  while loip and task.wait() do
+	pcall(function()
    firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc["Blizzard Armor"].Head, 1)
    firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc["Blizzard Armor"].Head, 0)
+	end)
  end
    end    
 })
