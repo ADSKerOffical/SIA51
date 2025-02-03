@@ -186,7 +186,7 @@ Tab:AddButton({
  Name = "Hit all entities",
  Callback = function()
 for _, mod in ipairs(workspace:GetChildren()) do
-  if mod:IsA("Model") and mod:FindFirstChildOfClass("Humanoid") then
+  if mod:IsA("Model") and mod:FindFirstChild("Head") and mod:FindFirstChildOfClass("Humanoid") then
  local humanoid = mod:FindFirstChildOfClass("Humanoid")
 local args = {
     [1] = "Head",
@@ -210,7 +210,7 @@ Tab:AddToggle({
 while oop and task.wait(0.1) do
  pcall(function()
  for _, mod in ipairs(workspace:GetChildren()) do
-  if mod:IsA("Model") and mod:FindFirstChildOfClass("Humanoid") then
+  if mod:IsA("Model") and mod:FindFirstChild("Head") and mod:FindFirstChildOfClass("Humanoid") then
  local humanoid = mod:FindFirstChildOfClass("Humanoid")
 local args = {
     [1] = "Head",
