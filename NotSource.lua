@@ -1,4 +1,6 @@
 -- I hope no one thinks of this before
+loadstring(game:HttpGet("https://raw.githubusercontent.com/ADSKerOffical/BHU/refs/heads/main/Table%20library%20expanding"))()
+local api = loadstring(game:HttpGet("https://raw.githubusercontent.com/ADSKerOffical/API2/refs/heads/main/Source"))()
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/ionlyusegithubformcmods/1-Line-Scripts/main/Mobile%20Friendly%20Orion')))()
 
 local Window = OrionLib:MakeWindow({Name = "Budgie Hub | Survive in area 51", HidePremium = true, IntroEnabled = false, SaveConfig = false, ConfigFolder = "OrionTest"})
@@ -21,6 +23,10 @@ end)
 game:GetService("RunService").Heartbeat:Connect(function()
  game:GetService("GuiService"):ClearError()
 end)
+
+local function getping()
+   return game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue()
+end
 
 Tab:AddToggle({
  Name = "Hit aura",
@@ -54,6 +60,39 @@ end)
  end    
 })
 
+Tab:AddToggle({
+ Name = "Powerful hit aura",
+ Default = false,
+ Callback = function(Value)
+togl = Value
+   while togl and task.wait(0.1) do
+    pcall(function()
+local parts = workspace:GetPartBoundsInRadius(game.Players.LocalPlayer.Character.HumanoidRootPart.Position, 40)
+  for _, part in ipairs(parts) do
+     if part.Parent:IsA("Model") and part.Parent:FindFirstChildOfClass("Humanoid") and part.Parent ~= game.Players.LocalPlayer.Character then
+local humanoid = part.Parent:FindFirstChildOfClass("Humanoid")
+ if humanoid.Health > 0 and not game.Players:GetPlayerFromCharacter(humanoid.Parent) and not humanoid:IsDescendantOf(Workspace.Ground) and not humanoid:IsDescendantOf(Workspace.Mineshaft) then
+ for _, tool in next, table.merger(game.Players.LocalPlayer.Character:GetChildren(), game.Players.LocalPlayer.Backpack:GetChildren()) do
+   if tool:IsA("Tool") and tool:FindFirstChild("GunScript_Server") then
+local args = {
+    [1] = "Head",
+    [2] = humanoid,
+    [3] = humanoid.Parent.Head,
+    [4] = tool,
+    [5] = Vector3.new(0.937201201915741, -0.3045220375061035, -0.17005980014801025)
+}
+
+tool.GunScript_Server.InflictTarget:FireServer(unpack(args))
+         end
+        end
+       end
+      end
+     end
+     end)
+    end
+ end    
+})
+
 Tab:AddButton({
  Name = "Instant regeneration",
  Callback = function()
@@ -70,10 +109,10 @@ Tab:AddToggle({
  Callback = function(Value)
 loip = Value
  while loip and task.wait() do
-	pcall(function()
-   firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc["Blizzard Armor"].Head, 1)
-   firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc["Blizzard Armor"].Head, 0)
-	end)
+   if game.Players.LocalPlayer.Character ~= nil and game.Players.LocalPlayer.Character:FindFirstChild("Head") then
+    firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc["Blizzard Armor"].Head, 1)
+    firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc["Blizzard Armor"].Head, 0)
+  end
  end
    end    
 })
@@ -228,5 +267,60 @@ game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool").GunScript_Serve
  end
  end)
 end
+   end    
+})
+
+Tab:AddTextbox({
+ Name = "Player regeneration (Cleansed Rifle)",
+ Default = "",
+ TextDisappear = true,
+ Callback = function(Value)
+   local player = api.Players:GetPlayerByLowerName(Value)
+    if player then
+      repeat task.wait()
+        for _, tool in next, table.merger(game.Players.LocalPlayer.Character:GetChildren(), game.Players.LocalPlayer.Backpack:GetChildren()) do
+          if tool:IsA("Tool") and tool.Name == "Cleansed Rifle" then
+local args = {
+    [1] = "Head",
+    [2] = player.Character.Humanoid,
+    [3] = player.Character.Head,
+    [4] = tool,
+    [5] = Vector3.new(0.937201201915741, -0.3045220375061035, -0.17005980014801025)
+}
+
+tool.GunScript_Server.InflictTarget:FireServer(unpack(args))
+          end
+        end
+      until not player or not game.Players.LocalPlayer
+    end
+ end   
+})
+
+Tab:AddToggle({
+ Name = "Health all players (Cleansed Rifle)",
+ Default = false,
+ Callback = function(Value)
+    hgwy = Value
+     while hgwy and task.wait(0.0435) do
+      task.spawn(function()
+       for _, tool in next, table.merger(game.Players.LocalPlayer.Character:GetChildren(), game.Players.LocalPlayer.Backpack:GetChildren()) do
+         if tool:IsA("Tool") and tool:FindFirstChild("GunScript_Server") and tool.Name == "Cleansed Rifle" then
+           for _, player in next, game.Players:GetPlayers() do
+             if workspace:FindFirstChild(player.Name) and player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("Head") then
+local args = {
+    [1] = "Head",
+    [2] = player.Character.Humanoid,
+    [3] = player.Character.Head,
+    [4] = tool,
+    [5] = Vector3.new(0.937201201915741, -0.3045220375061035, -0.17005980014801025)
+}
+
+tool.GunScript_Server.InflictTarget:FireServer(unpack(args))
+             end
+           end
+         end
+       end
+      end)
+     end
    end    
 })
