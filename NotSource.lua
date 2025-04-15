@@ -11,18 +11,23 @@ local Tab = Window:MakeTab({
 	PremiumOnly = false
 })
 
-pcall(function()
-game.Players.LocalPlayer.leaderstats.Cell:GetPropertyChangedSignal("Value"):Connect(function()
- if game.Players.LocalPlayer.leaderstats.Cell.Value <= -1 then
-game.Players.LocalPlayer.leaderstats.Cell.Value = 1
-   game:Shutdown()
- end
-end)
-end)
+if not workspace:FindFirstChild("BudgieHub–AntiCheatBypass") then
+local par = Instance.new("Part", workspace)
+par.Anchored = true
+par.Locked = true
+par.Name = "BudgieHub–AntiCheatBypass"
+par.Position = Vector3.new(624, 1143.7354695, 747)
+par.CanCollide = false
+par.Transparency = 1
+par.Size = Vector3.new(35, 2, 35)
+end
 
-game:GetService("RunService").Heartbeat:Connect(function()
- game:GetService("GuiService"):ClearError()
-end)
+while task.wait() do
+  pcall(function()
+   firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, par, 0)
+   firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, par, 1)
+  end)
+end
 
 local function gettime()
    return game.Players.LocalPlayer.PlayerGui.EventGUI.Time.Value
