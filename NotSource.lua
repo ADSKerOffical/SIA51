@@ -288,12 +288,6 @@ Tab:AddToggle({
           firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace.CyberLand.GetMechGun, 0)
         elseif Workspace:FindFirstChild("CorruptedZone") and not havetool("RGB") then
           firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace["CorruptedZone.RGB - 9999 Cell"].Head, 0)
-        elseif Workspace:FindFirstChild("DarkPortal") and not havetool("Double LX3") then
-          repeat task.wait()
-            firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace.DarkPortal.Beam, 0)
-          until game.Lighting:FindFirstChildOfClass("ColorCorrectionEffect")
-            firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace.MazeWorld["ESCAPE FROM THIS HELL"].Head, 0)
-            firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace.MazeWorld["ESCAPE FROM THIS HELL"].Head, 1)
       end
      end)
     end
