@@ -35,6 +35,8 @@ local function gettime()
    return game.Players.LocalPlayer.PlayerGui.EventGUI.Time.Value
 end
 
+game.Players.LocalPlayer:SetAttribute("WaitScriptEnd", false)
+
 Tab:AddToggle({
  Name = "Hit aura",
  Default = false,
@@ -138,7 +140,7 @@ loip = Value
 Tab:AddDropdown({
 	Name = "Get weapon",
 	Default = "1",
-	Options = {"Ice crossbow", "Volcano", "Rocket Launcher", "LXW", "Hex gun", '<p><font size="25">Deleted</font></p>', "Corrupted rifle", "Starecrown skull"},
+	Options = {"Ice crossbow", "Volcano", "Rocket Launcher", "LXW", "Hex gun", "Fire sword", "Water gun"},
 	Callback = function(Value)
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(625, 1147, 750)
  task.wait(0.3)
@@ -156,14 +158,30 @@ firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace
         elseif Value == "Hex gun" then
 firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace["Floor 2"].GetHEXGun.Head, 0)
 firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace["Floor 2"].GetHEXGun.Head, 1)
-        elseif Value == "Corrupted rifle" then
+        elseif Value == "Corrupted rifle (Only event)" then
 if Workspace:FindFirstChild("NightCity") then
   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Workspace.NightCity.Exit.Head.CFrame
 end
-       elseif Value == "Starecrown skull" then
+       elseif Value == "Starecrown skull (Only event)" then
 if workspace:FindFirstChild("GetScarecrowSkull") then
   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Workspace["GetScarecrowSkull"].CFrame
 end
+      elseif Value == "Fire sword" then
+repeat task.wait()
+  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Workspace.Incinerator.ChallengeButton7.Button.CFrame
+  fireproximityprompt(Workspace.Incinerator.ChallengeButton7.Button.ProximityPrompt, 0)
+until Workspace.Incinerator.ChallengeButton7.Button.ProximityPrompt.Enabled == false
+  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(61, 1062, 1158)
+      elseif Value == "Water gun" then
+ repeat task.wait()
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.Sewer.Valve1.CFrame
+   fireproximityprompt(workspace.Sewer.Valve1.ProximityPrompt, 0)
+ until workspace.Sewer.Valve1.ProximityPrompt.Enabled == false
+ repeat task.wait()
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.Sewer.Valve2.CFrame
+   fireproximityprompt(workspace.Sewer.Valve2.ProximityPrompt, 0)
+ until workspace.Sewer.Valve2.ProximityPrompt.Enabled == false
+ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-362, 960, -54)
         end
 	end    
 })
@@ -183,7 +201,7 @@ end
 Tab:AddDropdown({
 	Name = "Teleport",
 	Default = "1",
-	Options = {"Spawn", "Portal", "Incinerator", "Metro", "Sewerage", "Reaper door"},
+	Options = {"Spawn", "Portal", "Incinerator", "Metro", "Sewerage", "Reaper door", "Craft zone", "Mineshaft"},
 	Callback = function(Value)
 		if Value == "Spawn" then
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(709, 1150, 744)
@@ -197,28 +215,88 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-469, 92
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-495, 916, -56)
 		elseif Value == "Reaper door" then
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-202, 982, 294)
+        elseif Value == "Mineshaft" then
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-471, 753, 920)
+        elseif Value == "Craft zone" then
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(954, 1070, 735)
 		end
 	end    
 })
 
 Tab:AddButton({
- Name = "Unpack all supply box",
+ Name = "Unpack all supply items",
  Callback = function()
 local saved = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-for _, promp in ipairs(workspace:GetDescendants()) do
-  if promp:IsA("ProximityPrompt") and promp.Parent.Name == "SupplyBox" then
-promp.MaxActivationDistance = 100
-promp.Enabled = true
-promp.ClickablePrompt = true
+for _, promp in ipairs(workspace:GetChildren()) do
+  if promp:IsA("BasePart") and promp.Name == "SupplyBox" or promp.Name == "SupplyBall" then
+promp.ProximityPrompt.MaxActivationDistance = 100
+promp.ProximityPrompt.Enabled = true
+promp.ProximityPrompt.ClickablePrompt = true
 
-game.Workspace[game.Players.LocalPlayer.Name]:SetPrimaryPartCFrame(promp.Parent.CFrame)
+repeat task.wait()
+ game.Workspace[game.Players.LocalPlayer.Name]:SetPrimaryPartCFrame(promp.CFrame)
+ pcall(function() fireproximityprompt(promp.ProximityPrompt, 1e9) end)
+until not promp or not promp:FindFirstChild("ProximityPrompt")
 
-  task.wait(0.2)
-fireproximityprompt(promp, 1e9)
  end
 end
  task.wait(0.1)
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = saved
+   end    
+})
+
+local function havetool(toool)
+  for _, tool in next, table.merger(game.Players.LocalPlayer.Backpack:GetChildren(), game.Players.LocalPlayer.Character:GetChildren()) do
+    if tool:IsA("Tool") and tool.Name == toool.Name then
+      return true
+    end
+  end
+  return false
+end
+
+local function returnpos(time)
+  if game.Players.LocalPlayer:GetAttribute("WaitScriptEnd") == false then
+    game.Players.LocalPlayet:SetAttribute("WaitScriptEnd", true)
+    local pos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+      task.delay(time, function() 
+       game.Players.LocalPlayer:SetAttribute("WaitScriptEnd", false)
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = pos 
+      end)
+   end
+end
+
+Tab:AddToggle({
+ Name = "Auto get portal event guns",
+ Default = false,
+ Callback = function(Value)
+   hhej = Value
+    while hhej and task.wait() do
+     pcall(function()
+      if Workspace:FindFirstChild("GetReaperGun") and not havetool("Reaper\'s Scythe") then
+          firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace.GetReaperGun, 0)
+        elseif Workspace:FindFirstChild("GetSecurityTablet") and not havetool("Security Tablet") then
+          firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace.GetSecurityTablet, 0)
+        elseif Workspace:FindFirstChild("GetScarecrowSkull") and not havetool("Scarecrow Skull") then
+          firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace.GetScarecrowSkull, 0)
+        elseif Workspace:FindFirstChild("DeadGround") and not havetool("LXD") then
+          firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace.DeadGround["LXD - 9999 Cell"], 0)
+        elseif Workspace:FindFirstChild("NightCity") and not havetool("Corrupted Rifle") then
+          firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace.NightCity.Exit.Head, 0)
+        elseif Workspace.Sewer:FindFirstChild("GetWaterGun") and not havetool("Water Gun") then
+          firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace.Sewer.GetWaterGun, 0)
+        elseif Workspace:FindFirstChild("CyberLand") and Workspace.CyberLand:FindFirstChild("GetMechGun") and not havetool("Mech O\' Matic") then
+          firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace.CyberLand.GetMechGun, 0)
+        elseif Workspace:FindFirstChild("CorruptedZone") and not havetool("RGB") then
+          firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace["CorruptedZone.RGB - 9999 Cell"].Head, 0)
+        elseif Workspace:FindFirstChild("DarkPortal") and not havetool("Double LX3") then
+          repeat task.wait()
+            firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace.DarkPortal.Beam, 0)
+          until game.Lighting:FindFirstChildOfClass("ColorCorrectionEffect")
+            firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace.MazeWorld["ESCAPE FROM THIS HELL"].Head, 0)
+            firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, Workspace.MazeWorld["ESCAPE FROM THIS HELL"].Head, 1)
+      end
+     end)
+    end
    end    
 })
 
