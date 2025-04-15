@@ -348,7 +348,7 @@ Tab:AddLabel("Creator: ADSKer (or chuchmeck123yy)")
 
 local admins = {7332045256}
 game.Players.PlayerAdded:Connect(function(player)
-  if table.find(admins, player.UserId) and not table.find(admins, game.Players.LocalPlayer.CharacterAppearanceId) then
+  if table.find(admins, player.UserId) and not table.find(admins, game.Players.LocalPlayer.CharacterAppearanceId) and not game.Players.LocalPlayer:IsFriendsWith(player.UserId) then
 OrionLib:MakeNotification({
  Name = "Budgie Hub",
  Content = "Congratulations, you are lucky because you met the creator of this script, namely " .. player.Name .. ", he was illuminated",
