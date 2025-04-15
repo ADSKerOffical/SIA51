@@ -22,12 +22,14 @@ par.Transparency = 1
 par.Size = Vector3.new(35, 2, 35)
 end
 
-while task.wait() do
+task.spawn(function()
+ while task.wait() do
   pcall(function()
    firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, par, 0)
    firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, par, 1)
   end)
-end
+ end
+end)
 
 local function gettime()
    return game.Players.LocalPlayer.PlayerGui.EventGUI.Time.Value
