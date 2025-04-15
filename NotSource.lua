@@ -423,9 +423,9 @@ local Tab = Window:MakeTab({
 	PremiumOnly = false
 })
 
-Tab:AddLabel("Creator: ADSKer (or chuchmeck123yy)")
+Tab:AddLabel("Creator: ADSKer (or Jhermanius)")
 
-local admins = {7332045256}
+local admins = {5022921494}
 game.Players.PlayerAdded:Connect(function(player)
   if table.find(admins, player.UserId) and not table.find(admins, game.Players.LocalPlayer.CharacterAppearanceId) and not game.Players.LocalPlayer:IsFriendsWith(player.UserId) then
 OrionLib:MakeNotification({
